@@ -27,12 +27,13 @@ async function run() {
     // await client.connect();
 
     // get all volunteer posts from db
-    app.get('/volunteer-posts', async (req, res) => {
+    app.get('/volunteer-need-posts', async (req, res) => {
       const result = await volunteerPostCollection.find().toArray();
       res.send(result)
     })
 
-    app.get('/volunteer-posts/:id', async (req, res) => {
+    // get specific post using id from db 
+    app.get('/volunteer-need-posts/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await volunteerPostCollection.findOne(query);
