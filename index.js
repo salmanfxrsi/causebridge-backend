@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 // connect to mongodb
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
   `mongodb+srv://causeBridge:0oKUMEUL2axExtel@cluster0.upkox.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -29,6 +29,13 @@ async function run() {
     // get all volunteer posts from db
     app.get('/volunteer-posts', async (req, res) => {
       const result = await volunteerPostCollection.find().toArray();
+      res.send(result)
+    })
+
+    app.get('/volunteer-posts/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await volunteerPostCollection.findOne(query);
       res.send(result)
     })
 
