@@ -41,6 +41,14 @@ async function run() {
       res.send(result);
     });
 
+    // get specific user posts using email
+    app.get("/get-specific-user-post/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { organizerEmail: email };
+      const result = await volunteerNeededPostCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // showcase volunteer need 6 posts with upcoming deadlines
     app.get("/upcoming-deadline-posts", async (req, res) => {
       const result = await volunteerNeededPostCollection
