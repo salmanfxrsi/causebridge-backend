@@ -67,6 +67,23 @@ async function run() {
       res.send(result);
     });
 
+    // update a single volunteer needed post in db
+    app.patch("/update-my-posts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const postData = req.body;
+      const updateData = {
+        $set: postData,
+      };
+      const result = await volunteerNeededPostCollection.updateOne(
+        query,
+        updateData,
+        options
+      );
+      res.send(result);
+    });
+
     // delete specific single post by id
     app.delete("/delete-specific-post/:id", async (req, res) => {
       const id = req.params.id;
