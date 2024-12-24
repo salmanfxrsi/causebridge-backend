@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -63,6 +64,14 @@ async function run() {
     app.post("/add-volunteer-needed-post", async (req, res) => {
       const postData = req.body;
       const result = await volunteerNeededPostCollection.insertOne(postData);
+      res.send(result);
+    });
+
+    // delete specific single post by id
+    app.delete("/delete-specific-post/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await volunteerNeededPostCollection.deleteOne(query);
       res.send(result);
     });
 
