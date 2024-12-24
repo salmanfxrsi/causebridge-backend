@@ -9,8 +9,7 @@ app.use(cors());
 
 // connect to mongodb
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const uri =
-  `mongodb+srv://causeBridge:0oKUMEUL2axExtel@cluster0.upkox.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://causeBridge:0oKUMEUL2axExtel@cluster0.upkox.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -20,32 +19,45 @@ const client = new MongoClient(uri, {
   },
 });
 
-const volunteerPostCollection = client.db('causebridgeDB').collection('volunteerPOSTS')
+const volunteerNeededPostCollection = client
+  .db("causebridgeDB")
+  .collection("volunteerPOSTS");
 
 async function run() {
   try {
     // await client.connect();
 
     // get all volunteer posts from db
-    app.get('/volunteer-need-posts', async (req, res) => {
-      const result = await volunteerPostCollection.find().toArray();
-      res.send(result)
-    })
+    app.get("/volunteer-need-posts", async (req, res) => {
+      const result = await volunteerNeededPostCollection.find().toArray();
+      res.send(result);
+    });
 
-    // get specific post using id from db 
-    app.get('/volunteer-need-posts/:id', async (req, res) => {
+    // get specific post using id from db
+    app.get("/volunteer-need-posts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await volunteerPostCollection.findOne(query);
-      res.send(result)
-    })
+      const result = await volunteerNeededPostCollection.findOne(query);
+      res.send(result);
+    });
 
     // showcase volunteer need 6 posts with upcoming deadlines
-    app.get('/upcoming-deadline-posts', async (req, res) => {
-      const result = await volunteerPostCollection.find().sort({deadline: 1}).limit(6).toArray();
-      res.send(result)
-    })
-    
+    app.get("/upcoming-deadline-posts", async (req, res) => {
+      const result = await volunteerNeededPostCollection
+        .find()
+        .sort({ deadline: 1 })
+        .limit(6)
+        .toArray();
+      res.send(result);
+    });
+
+    // post a single volunteer needed post in db
+    app.post("/add-volunteer-needed-post", async (req, res) => {
+      const postData = req.body;
+      const result = await volunteerNeededPostCollection.insertOne(postData);
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
@@ -54,7 +66,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
 
 app.get("/", (req, res) => {
   res.send("CauseBridge Server is running......");
