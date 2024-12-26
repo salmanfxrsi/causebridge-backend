@@ -23,6 +23,9 @@ const client = new MongoClient(uri, {
 const volunteerNeededPostCollection = client
   .db("causebridgeDB")
   .collection("volunteerPOSTS");
+const volunteerRequestsCollection = client
+  .db("causebridgeDB")
+  .collection("volunteerRequests");
 
 async function run() {
   try {
@@ -64,6 +67,13 @@ async function run() {
     app.post("/add-volunteer-needed-post", async (req, res) => {
       const postData = req.body;
       const result = await volunteerNeededPostCollection.insertOne(postData);
+      res.send(result);
+    });
+
+    // post a volunteer request in db
+    app.post("/volunteer-request", async (req, res) => {
+      const postData = req.body;
+      const result = await volunteerRequestsCollection.insertOne(postData);
       res.send(result);
     });
 
