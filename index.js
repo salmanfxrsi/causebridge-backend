@@ -53,6 +53,14 @@ async function run() {
       res.send(result);
     });
 
+    // get specific user request to be a volunteer using email
+    app.get("/volunteer-request-posts/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { volunteerEmail: email };
+      const result = await volunteerRequestsCollection.find(query).toArray();
+      res.send(result);
+    });
+
     // showcase volunteer need 6 posts with upcoming deadlines
     app.get("/upcoming-deadline-posts", async (req, res) => {
       const result = await volunteerNeededPostCollection
@@ -73,7 +81,17 @@ async function run() {
     // post a volunteer request in db
     app.post("/volunteer-request", async (req, res) => {
       const postData = req.body;
+
+      // inserted request data
       const result = await volunteerRequestsCollection.insertOne(postData);
+
+      // decrease volunteersNeeded number from main post
+      const filter = { _id: new ObjectId(postData.postId) }
+      const update = {
+        $inc: {volunteersNeeded: -1}
+      } 
+      const updateVolunteerNeededNumber = await volunteerNeededPostCollection.updateOne(filter, update)
+
       res.send(result);
     });
 
