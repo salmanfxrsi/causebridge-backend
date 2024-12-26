@@ -33,7 +33,14 @@ async function run() {
 
     // get all volunteer posts from db
     app.get("/volunteer-need-posts", async (req, res) => {
-      const result = await volunteerNeededPostCollection.find().toArray();
+      const search = req.query.search;
+      let query = {
+        postTitle: {
+          $regex: search,
+          $options: 'i',
+        },
+      }
+      const result = await volunteerNeededPostCollection.find(query).toArray();
       res.send(result);
     });
 
