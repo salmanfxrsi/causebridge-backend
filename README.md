@@ -5,8 +5,8 @@ CauseBridge is a volunteer management platform designed to streamline the creati
 ## Purpose
 The server-side application provides the backend support for the CauseBridge platform, including database interactions, authentication, and API endpoints for managing volunteer posts and user actions.
 
-## Backend Repository
-[Visit CauseBridge Backend Repository](https://github.com/salmanfxrsi/causebridge-backend)
+## Frontend Repository
+[Visit CauseBridge Frontend Repository](https://github.com/salmanfxrsi/causebridge-frontend)
 
 ## Live Server URL
 [Deployed Server URL](https://cause-bridge-server-side.vercel.app/)
